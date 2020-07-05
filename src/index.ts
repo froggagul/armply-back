@@ -9,7 +9,7 @@ if (process.env.DATABASE_URL == undefined) {
     process.exit(1);
 }
 
-mongoose.connect(process.env.DATABASE_URL, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE_URL, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 const db = mongoose.connection;
 db.on('error', (err) => {
     console.error(err);
@@ -20,7 +20,8 @@ db.once('open', () => {
 
 const app: Application = express();
 
-
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 app.use(router);
 
