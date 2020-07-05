@@ -1,7 +1,10 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
-import router from './routes';
 import dotenv from 'dotenv';
+import passport from 'passport';
+import router from './routes';
+import * as PassportStrategy from './util/passport';
+
 dotenv.config();
 
 if (process.env.DATABASE_URL == undefined) {
@@ -19,6 +22,12 @@ db.once('open', () => {
 });
 
 const app: Application = express();
+//passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(PassportStrategy.localStrategy);
+passport.serializeUser(PassportStrategy.serialize);
+passport.deserializeUser(PassportStrategy.deserialize);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

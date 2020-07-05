@@ -19,7 +19,7 @@ const schema = new mongo.Schema<User>({
 
 schema.index('username');
 
-type UserDoc = User & mongo.Document;
+export type UserDoc = User & mongo.Document;
 
 const UserModel = mongo.model<UserDoc>('User', schema);
 export default UserModel;
