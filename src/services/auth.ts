@@ -31,7 +31,6 @@ export async function create(profile: UserSignup):ServiceResult<'USERNAME_EXISTS
         createdAt: new Date(),
         updatedAt: new Date(),
       }));
-      console.log(userObj);
       return {
         success: true,
         result: userObj

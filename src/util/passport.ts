@@ -28,6 +28,7 @@ export const localStrategy = new LocalStrategy({
  * @param done Callback function
  */
 export const serialize = (user: User, done: any) => {
+  console.log('se username:', user.username);
   done(null, user.username);
 };
 
@@ -37,6 +38,7 @@ export const serialize = (user: User, done: any) => {
  * @param done Callback function
  */
 export const deserialize = (username: string, done: any) => {
+  console.log('de username:', username);
   AuthService.view(username).then(result => {
     if (!result.success) {
       done(result.reason!);
