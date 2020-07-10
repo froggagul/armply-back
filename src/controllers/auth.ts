@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import * as AuthService from '../services/auth';
+import { request } from 'http';
 
 export async function signup(req: Request, res: Response/*, next: NextFunction*/) {
   try {
@@ -18,6 +19,18 @@ export async function signup(req: Request, res: Response/*, next: NextFunction*/
     // next(err);
   }
 }
+
+export async function getMyInfo(req: Request, res: Response) {
+  try{
+    if (req.isAuthenticated()) {
+      console.log(req.user)
+      res.json(req.user);
+    }
+  } catch (err) {
+    return ('err');
+  }
+}
+
 export const login = [
   (req: Request, res: Response, next: NextFunction) => {
     console.log(req.user);
@@ -46,3 +59,8 @@ export const login = [
     }
   }
 ];
+
+export function logout(req: Request, res: Response) {
+  req.logout();
+  res.json({success: true});
+}
