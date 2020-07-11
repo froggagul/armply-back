@@ -3,24 +3,24 @@ import PostModel from '../models/post';
 import { ServiceResult } from '../util/generic';
 import { Post } from '../types/model/post';
 
-export async function createPost(title: string, content: string, isPrivate: Boolean, author: ObjectId):
+export async function createPost(title: string, content: string, isPrivate: Boolean, isSent: Boolean, author: ObjectId):
 ServiceResult<'USER_PERM', Post> {
   const newPost = await PostModel.create({
     title,
     content,
     author,
     isPrivate,
+    isSent,
     createdAt: new Date(),
     updatedAt: new Date()
   });
-  console.log(newPost._id);
   return {
     result: newPost,
     success: true
   };
 }
 
-export async function editPost(post: ObjectId, title: string, content: string, isPrivate: Boolean, user: ObjectId):
+export async function editPost(post: ObjectId, title: string, content: string, isPrivate: Boolean, isSent: Boolean, user: ObjectId):
 ServiceResult<'POST_NEXIST'|'USER_PERM', Post> {
   const postObj = await PostModel.findById(post);
   if (!postObj) {
@@ -33,6 +33,7 @@ ServiceResult<'POST_NEXIST'|'USER_PERM', Post> {
   postObj.title = title;
   postObj.content = content;
   postObj.isPrivate = isPrivate;
+  postObj.isSent = isSent;
   await postObj.save();
   return {success: true};
 }
