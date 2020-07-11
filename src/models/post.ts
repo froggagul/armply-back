@@ -8,5 +8,5 @@ const schema = new mongo.Schema<Post>({
   author: {ref: 'User', required: true, type: ObjectId}
 }, {timestamps: true});
 
-const PostModel = mongo.model<Post & mongo.TimestampedDocument>('Post', schema);
+const PostModel = mongo.model<Post & mongo.Document>('Post', schema);
 export default PostModel;

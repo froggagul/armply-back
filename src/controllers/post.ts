@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from 'bson';
 import * as PostService from '../services/post';
-
+import { UserDoc } from '../models/user';
 
 export async function writePost(req: Request, res: Response, next: NextFunction) {
   try {
     const {content, title} = req.body;
-    const ret = await PostService.createPost(title, content, req.user!._id);
+    const ret = await PostService.createPost(title, content, (req.user as UserDoc)!._id);
     if (ret.success) {
       res.status(200).json({...ret});
       return;
@@ -23,7 +23,7 @@ export async function updatePost(req: Request, res: Response, next: NextFunction
   try {
     const { id } = req.params;
     const { content, title } = req.body;
-    const result = await PostService.editPost(new ObjectId(id), title, content, req.user!._id);
+    const result = await PostService.editPost(new ObjectId(id), title, content, (req.user as UserDoc)!._id);
     if (result.success) {
       return res.json({});
     }
@@ -41,7 +41,7 @@ export async function updatePost(req: Request, res: Response, next: NextFunction
 export async function removePost(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
-    const ret = await PostService.removePost(new ObjectId(id), req.user!._id);
+    const ret = await PostService.removePost(new ObjectId(id), (req.user as UserDoc)!._id);
     if (ret.success) {
       return res.json({});
     }
