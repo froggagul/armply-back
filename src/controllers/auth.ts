@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import * as AuthService from '../services/auth';
-import { request } from 'http';
 
 export async function signup(req: Request, res: Response/*, next: NextFunction*/) {
   try {
