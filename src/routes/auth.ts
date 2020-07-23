@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.post('/signup', AuthController.signup);
 router.post('/login', AuthController.login);
-router.get('/view', AuthController.getMyInfo);
+router.post('/view', AuthController.viewEmail);
+router.get('/my', AuthController.getMyInfo);
 router.delete('/logout', AuthController.logout);
 // oAuth 기능
 

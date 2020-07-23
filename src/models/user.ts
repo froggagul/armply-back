@@ -1,14 +1,6 @@
 import mongo from 'mongoose';
+import User from '../types/model/user';
 
-interface User {
-  email: string,
-  name: string,
-  username: string,
-  password: string,
-  type: 'user' | 'manager',
-  createdAt: Date,
-  updatedAt: Date,
-}
 const schema = new mongo.Schema<User>({
   email: {required: true, type: String},
   name: {required: true, type: String},

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import * as AuthService from '../services/auth';
-import { request } from 'http';
 
 export async function signup(req: Request, res: Response/*, next: NextFunction*/) {
   try {
@@ -33,7 +32,6 @@ export async function getMyInfo(req: Request, res: Response) {
 
 export const login = [
   (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.user);
     if (req.isAuthenticated()) {
       res.status(403).json({reason: 'AUTENTICATED'});
     } else {
@@ -42,7 +40,7 @@ export const login = [
   },
   passport.authenticate('local', {failWithError: true}),
   (req: Request, res: Response) => {
-    res.json({});
+    res.json({success: true});
   },
   (err: any, req: Request, res: Response, __: NextFunction) => {
     /**
@@ -63,4 +61,15 @@ export const login = [
 export function logout(req: Request, res: Response) {
   req.logout();
   res.json({success: true});
+}
+
+export async function viewEmail(req: Request, res: Response, next: NextFunction) {
+  const { email } = req.body;
+  const ret = await AuthService.emailView(email);
+  console.log(ret);
+  if (ret.success) {
+    res.json({success: true});
+  } else {
+    res.json({success: false});
+  }
 }

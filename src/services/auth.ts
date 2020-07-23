@@ -37,9 +37,9 @@ export async function create(profile: UserSignup):ServiceResult<'USERNAME_EXISTS
       };
 };
 
-export async function authenticate(username: string, password: string):
+export async function authenticate(email: string, password: string):
 ServiceResult<'BAD_CREDENTIALS', User> {
-  const user = await UserModel.findOne({username});
+  const user = await UserModel.findOne({email});
   if (!user) {
     return {
       success: false,
@@ -69,4 +69,18 @@ ServiceResult<'USER_NEXIST', UserDoc> {
     return {success: false, reason: 'USER_NEXIST'};
   }
   return {success: true, result: user};
+}
+
+/**
+ * @description 해당 이메일을 쓰는 사용자가 존재하는지 확인합니다
+ * @param email 이메일
+ */
+export async function emailView(email: string):
+ServiceResult<'User_EXIST' | 'User_NEXIST', UserDoc> {
+  const user = await UserModel.findOne({email});
+  console.log(user);
+  if(!user) {
+    return {success: false, reason: 'User_NEXIST'};
+  }
+  return {success: true, reason: 'User_EXIST'};
 }
