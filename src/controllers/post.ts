@@ -5,7 +5,7 @@ import { UserDoc } from '../models/user';
 
 export async function writePost(req: Request, res: Response, next: NextFunction) {
   try {
-    const {content, title, isPrivate, isSent} = req.body;
+    const {content, isPrivate} = req.body;
     const ret = await PostService.createPost(content, isPrivate, (req.user as UserDoc)!._id);
     if (ret.success) {
       res.status(200).json({...ret});
@@ -22,7 +22,7 @@ export async function writePost(req: Request, res: Response, next: NextFunction)
 export async function updatePost(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
-    const { content, isPrivate, isSent } = req.body;
+    const { content, isPrivate } = req.body;
     const result = await PostService.editPost(new ObjectId(id), content, isPrivate, (req.user as UserDoc)!._id);
     if (result.success) {
       return res.json({result});

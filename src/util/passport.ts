@@ -8,10 +8,10 @@ import User from '../types/model/user';
 export const localStrategy = new LocalStrategy({
   passReqToCallback: true,
   passwordField: 'password',
-  usernameField: 'username'
-}, async (_, username, password, done) => {
+  usernameField: 'email'
+}, async (_, email, password, done) => {
   try {
-    const result = await AuthService.authenticate(username, password);
+    const result = await AuthService.authenticate(email, password);
     if (result.success) {
       return done(null, result.result!);
     } else {
