@@ -8,6 +8,7 @@ export async function create(profile: UserSignup):ServiceResult<'USERNAME_EXISTS
         {username: profile.username},
         {email: profile.email}
       ]});
+    console.log(existingUser);
       if (existingUser !== null) {
         if (existingUser.username === profile.username) {
           return {
@@ -27,10 +28,12 @@ export async function create(profile: UserSignup):ServiceResult<'USERNAME_EXISTS
         }
       }
       const userObj = await UserModel.create(Object.assign(profile, {
+        name: profile.username,
         password: await Password.hash(profile.password),
         createdAt: new Date(),
         updatedAt: new Date(),
       }));
+      console.log('userobj', userObj);
       return {
         success: true,
         result: userObj
@@ -78,7 +81,6 @@ ServiceResult<'USER_NEXIST', UserDoc> {
 export async function emailView(email: string):
 ServiceResult<'User_EXIST' | 'User_NEXIST', UserDoc> {
   const user = await UserModel.findOne({email});
-  console.log(user);
   if(!user) {
     return {success: false, reason: 'User_NEXIST'};
   }

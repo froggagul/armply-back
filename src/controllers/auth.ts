@@ -8,6 +8,7 @@ export async function signup(req: Request, res: Response/*, next: NextFunction*/
       res.status(403).json({});
       return;
     }
+    console.log('reqbody', req.body);
     const result = await AuthService.create(req.body);
     if (result.success) {
       res.json(result);
@@ -22,7 +23,6 @@ export async function signup(req: Request, res: Response/*, next: NextFunction*/
 export async function getMyInfo(req: Request, res: Response) {
   try{
     if (req.isAuthenticated()) {
-      console.log(req.user)
       res.json(req.user);
     }
   } catch (err) {
@@ -46,7 +46,6 @@ export const login = [
     /**
      * @see AuthService.authenticate reason values
      */
-    console.log(req);
     if (err === 'BAD_CREDENTIALS') {
       res.status(401).json({reason: err});
     } else if (err === 'INACTIVE') {
@@ -66,7 +65,6 @@ export function logout(req: Request, res: Response) {
 export async function viewEmail(req: Request, res: Response, next: NextFunction) {
   const { email } = req.body;
   const ret = await AuthService.emailView(email);
-  console.log(ret);
   if (ret.success) {
     res.json({success: true});
   } else {

@@ -58,3 +58,51 @@ export async function removePost(req: Request, res: Response, next: NextFunction
     next(err);
   }
 }
+
+export async function list(req: Request, res: Response, next: NextFunction) {
+  try {
+    // perpage, page, id
+    const {perPage, page} = req.query;
+    const ret = await PostService.listPosts(parseInt(perPage as string), parseInt(page as string), undefined);
+    if (ret.success) {
+      return res.status(200).json({
+        posts: ret.result!.posts.map(x => ({
+          createdAt: x.createdAt,
+          user: x.author,
+          content: x.content,
+          isPrivate: x.isPrivate,
+          isSent: x.isSent,
+        }))
+      });
+    }
+    res.status(400).json({
+      reason: ret.reason
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function my(req: Request, res: Response, next: NextFunction) {
+  try {
+    // perpage, page, id
+    const {perPage, page} = req.query;
+    const ret = await PostService.listPosts(parseInt(perPage as string), parseInt(page as string), (req.user as UserDoc)!._id);
+    if (ret.success) {
+      return res.status(200).json({
+        posts: ret.result!.posts.map(x => ({
+          createdAt: x.createdAt,
+          user: x.author,
+          content: x.content,
+          isPrivate: x.isPrivate,
+          isSent: x.isSent,
+        }))
+      });
+    }
+    res.status(400).json({
+      reason: ret.reason
+    });
+  } catch (err) {
+    next(err);
+  }
+}

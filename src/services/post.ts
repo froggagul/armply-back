@@ -31,6 +31,7 @@ ServiceResult<'POST_NEXIST'|'USER_PERM', Post> {
   }
   postObj.content = content;
   postObj.isPrivate = isPrivate;
+  postObj.updatedAt = new Date();
   await postObj.save();
   return {success: true};
 }
@@ -53,4 +54,24 @@ ServiceResult<'POST_NEXIST'|'USER_NEXIST'|'USER_PERM'> {
   // User authenticated past this point
   await postObj.remove();
   return {success: true};
+}
+
+export async function listPosts(perPage: number, page: number = 1, id?: ObjectId):
+ServiceResult<undefined, {posts: Post[]}> {
+  let query = PostModel.find();
+  if (id) {
+    query = PostModel.find({author: id});
+  } else {
+    query = PostModel.find({isPrivate: false});
+  }
+  if (page > 1) {
+    query = query.skip(perPage * (page - 1));
+  }
+  const result = await query.limit(perPage);
+  return {
+    result: {
+      posts: result
+    },
+    success: true
+  };
 }
