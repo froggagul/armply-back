@@ -1,8 +1,9 @@
 import { ObjectId } from 'bson';
+import User from './user';
 
 export interface Post {
     content: string;
-    author: ObjectId;
+    author: User |  ObjectId;
     isPrivate: Boolean;
     isSent: Boolean;
     createdAt: Date;

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from 'bson';
 import * as PostService from '../services/post';
 import { UserDoc } from '../models/user';
+import User from '../types/model/user';
 
 export async function writePost(req: Request, res: Response, next: NextFunction) {
   try {
@@ -92,7 +93,7 @@ export async function my(req: Request, res: Response, next: NextFunction) {
       return res.status(200).json({
         posts: ret.result!.posts.map(x => ({
           createdAt: x.createdAt,
-          user: x.author,
+          user: (x.author as User),
           content: x.content,
           isPrivate: x.isPrivate,
           isSent: x.isSent,

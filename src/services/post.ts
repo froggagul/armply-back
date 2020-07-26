@@ -67,6 +67,7 @@ ServiceResult<undefined, {posts: Post[]}> {
   if (page > 1) {
     query = query.skip(perPage * (page - 1));
   }
+  query = query.sort('-createdAt').populate('author', 'username name');
   const result = await query.limit(perPage);
   return {
     result: {
