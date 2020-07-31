@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import * as AuthService from '../services/auth';
+import { UserDoc } from '../models/user';
+import PostModel from '../models/post';
 
 export async function signup(req: Request, res: Response/*, next: NextFunction*/) {
   try {
@@ -22,9 +24,15 @@ export async function signup(req: Request, res: Response/*, next: NextFunction*/
 
 export async function getMyInfo(req: Request, res: Response) {
   try{
-    if (req.isAuthenticated()) {
-      res.json(req.user);
-    }
+    const cnt = await PostModel.find({author: (req.user as UserDoc)._id}).count();
+    const {email, name, username,_id} = req.user as UserDoc;
+    res.json({
+      email,
+      name,
+      username,
+      _id,
+      replyCount: cnt
+    });
   } catch (err) {
     return ('err');
   }
