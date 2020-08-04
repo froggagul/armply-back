@@ -56,7 +56,7 @@ passport.use(PassportStrategy.facebookStrategy);
 passport.serializeUser(PassportStrategy.serialize);
 passport.deserializeUser(PassportStrategy.deserialize);
 app.use((req, _, next) => {
-  console.log(req.isAuthenticated());
+  console.log(req.session);
   if (!req.session?.passport || JSON.stringify(req.session.passport) === '{}') {
     req.user = undefined;
   }
