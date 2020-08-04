@@ -29,7 +29,7 @@ const app: Application = express();
 app.use(cors({
   credentials: true, // enable set cookie
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  origin: ['https://master.d36t62qh9mf3h3.amplifyapp.com', 'https://www.armply.com']
+  origin: ['https://master.d36t62qh9mf3h3.amplifyapp.com', 'http://www.armply.com']
 }));
 app.use(expressSession({
   cookie: {
@@ -56,11 +56,12 @@ passport.use(PassportStrategy.googleStrategy);
 passport.use(PassportStrategy.facebookStrategy);
 passport.serializeUser(PassportStrategy.serialize);
 passport.deserializeUser(PassportStrategy.deserialize);
-app.use((req, _, next) => {
+app.use((req, res, next) => {
   console.log(req.headers);
   if (!req.session?.passport || JSON.stringify(req.session.passport) === '{}') {
     req.user = undefined;
   }
+  res.setHeader('Set-Cookie', 'key=value; HttpOnly; SameSite=strict');
   next();
 });
 
