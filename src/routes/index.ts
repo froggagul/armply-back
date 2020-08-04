@@ -8,7 +8,7 @@ router.use('/auth', AuthRouter);
 router.use('/posts', PostRouter);
 
 router.get('/', (_req, res) => {
-    res.send('hello this is db');
+    res.send('why did you came here? fuckup');
 });
 
 export default router;
