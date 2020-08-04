@@ -14,11 +14,7 @@ router.delete('/logout', checkAuthenticated, AuthController.logout);
 // oAuth 기능
 router.get('/google', AuthController.googleLogin);
 router.get('/google/redirect', AuthController.googleLogin);
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    success: false,
-    message: "user failed to authenticate."
-  });
-});
+router.get('/facebook', AuthController.facebookLogin);
+router.get('/facebook/redirect', AuthController.facebookLogin);
 
 export default router;

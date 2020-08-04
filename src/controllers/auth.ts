@@ -98,6 +98,37 @@ export const googleLogin = [
   }
 ];
 
+export const facebookLogin = [
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+      res.status(403).json({reason: 'AUTENTICATED'});
+    } else {
+      next();
+    }
+  },
+  passport.authenticate('facebook', {
+    successRedirect: CLIENT_HOME_PAGE_URL,
+    failureRedirect: `${CLIENT_HOME_PAGE_URL}/login`,
+    scope: ['email']
+  }),
+  (req: Request, res: Response) => {
+    res.json({success: true});
+  },
+  (err: any, req: Request, res: Response, __: NextFunction) => {
+    /**
+     * @see AuthService.authenticate reason values
+     */
+    if (err === 'BAD_CREDENTIALS') {
+      res.status(401).json({reason: err});
+    } else if (err === 'INACTIVE') {
+      res.status(403).json({reason: err});
+    } else {
+      console.log(`Uncaught error during authentication: ${err}`);
+      res.status(500).json({});
+    }
+  }
+];
+
 export function logout(req: Request, res: Response) {
   req.logout();
   res.json({success: true});

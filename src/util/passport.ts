@@ -1,5 +1,6 @@
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
+import {Strategy as FacebookStrategy} from 'passport-facebook';
 import * as AuthService from '../services/auth';
 import User, { UserSignup } from '../types/model/user';
 import dotenv from 'dotenv';
@@ -54,7 +55,36 @@ export const googleStrategy = new GoogleStrategy({
   } catch (err) {
     return done(err);
   }
-  
+});
+
+export const facebookStrategy = new FacebookStrategy({
+  clientID: process.env.FACEBOOK_ID || '',
+  clientSecret: process.env.FACEBOOK_SECRET || '',
+  callbackURL: '/auth/facebook/redirect',
+  profileFields: ['displayName', 'id', 'emails', 'name']
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    console.log('profile:', profile);
+    const email = profile._json.email;
+    if (email) {
+      const result = await AuthService.emailView(email, 'facebook');
+      if (result.success) {
+        return done(undefined, result.result);
+      } else {
+        const userProfile = {
+          username: profile.displayName,
+          name: profile.displayName,
+          email: email,
+          type: 'user',
+          loginType: 'facebook'
+        };
+        const result = await AuthService.create(userProfile as UserSignup);
+        return done(undefined, result.result);
+      }
+    }
+  } catch (err) {
+    return done(err);
+  }
 });
 
 /**
