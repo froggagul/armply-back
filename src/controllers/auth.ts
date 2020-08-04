@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import dotenv from 'dotenv';
 import * as AuthService from '../services/auth';
 import { UserDoc } from '../models/user';
 import PostModel from '../models/post';
 
-dotenv.config();
 
 export async function signup(req: Request, res: Response/*, next: NextFunction*/) {
   try {
@@ -69,8 +67,6 @@ export const login = [
   }
 ];
 
-const CLIENT_HOME_PAGE_URL = process.env.FRONT_URL;
-
 export const googleLogin = [
   (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
@@ -80,8 +76,6 @@ export const googleLogin = [
     }
   },
   passport.authenticate('google', {
-    successRedirect: CLIENT_HOME_PAGE_URL,
-    failureRedirect: `${CLIENT_HOME_PAGE_URL}/login`,
     scope: ['profile', 'email']
   }),
   (req: Request, res: Response) => {
@@ -112,8 +106,6 @@ export const facebookLogin = [
     }
   },
   passport.authenticate('facebook', {
-    successRedirect: CLIENT_HOME_PAGE_URL,
-    failureRedirect: `${CLIENT_HOME_PAGE_URL}/login`,
     scope: ['email']
   }),
   (req: Request, res: Response) => {
