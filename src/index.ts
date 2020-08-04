@@ -15,7 +15,7 @@ if (process.env.DATABASE_URL == undefined) {
     console.error('no database url on .env!')
     process.exit(1);
 }
-
+console.log(process.env.DATABASE_URL);
 mongoose.connect(process.env.DATABASE_URL, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 const db = mongoose.connection;
 db.on('error', (err) => {
