@@ -52,6 +52,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(PassportStrategy.localStrategy);
+passport.use(PassportStrategy.googleStrategy);
 passport.serializeUser(PassportStrategy.serialize);
 passport.deserializeUser(PassportStrategy.deserialize);
 app.use((req, _, next) => {

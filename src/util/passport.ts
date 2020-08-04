@@ -1,6 +1,11 @@
 import {Strategy as LocalStrategy} from 'passport-local';
+import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
 import * as AuthService from '../services/auth';
-import User from '../types/model/user';
+import User, { UserSignup } from '../types/model/user';
+import dotenv from 'dotenv';
+import { UserDoc } from '../models/user';
+
+dotenv.config();
 
 /**
  * @description Local authentication strategy
@@ -21,6 +26,36 @@ export const localStrategy = new LocalStrategy({
     return done(err);
   }
 });
+export const googleStrategy = new GoogleStrategy({
+  clientID: process.env.GOOGLE_ID || '',
+  clientSecret: process.env.GOOGLE_SECRET || '',
+  callbackURL: '/auth/google/redirect'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    console.log('profile:', profile);
+    console.log('emails:', profile._json.email);
+    const email = profile._json.email;
+    if (email) {
+      const result = await AuthService.emailView(email, 'google');
+      if (result.success) {
+        return done(undefined, result.result);
+      } else {
+        const userProfile = {
+          username: profile.displayName,
+          name: profile.displayName,
+          email: email,
+          type: 'user',
+          loginType: 'google'
+        };
+        const result = await AuthService.create(userProfile as UserSignup);
+        return done(undefined, result.result);
+      }
+    }
+  } catch (err) {
+    return done(err);
+  }
+  
+});
 
 /**
  * @description Serializes a `User` object to a `SerializedUser`
@@ -28,8 +63,8 @@ export const localStrategy = new LocalStrategy({
  * @param done Callback function
  */
 export const serialize = (user: User, done: any) => {
-  console.log('se username:', user.username);
-  done(null, user.username);
+  console.log('se username:', user);
+  done(null, user);
 };
 
 /**
@@ -37,9 +72,9 @@ export const serialize = (user: User, done: any) => {
  * @param username `SerializedUser` seralized user
  * @param done Callback function
  */
-export const deserialize = (username: string, done: any) => {
-  console.log('de username:', username);
-  AuthService.view(username).then(result => {
+export const deserialize = (user: UserDoc, done: any) => {
+  console.log('de username:', user);
+  AuthService.emailView(user.email, user.loginType).then(result => {
     if (!result.success) {
       done(result.reason!);
     } else {

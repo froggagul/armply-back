@@ -23,6 +23,7 @@
     "@types/express": "^4.17.7",
     "@types/express-session": "^1.17.0",
     "@types/mongoose": "^5.7.31",
+    "@types/passport-google-oauth20": "^2.0.3",
     "@types/passport-local": "^1.0.33",
     "argon2": "^0.26.2",
     "connect-mongo": "^3.2.0",

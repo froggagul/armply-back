@@ -9,9 +9,10 @@ export interface UserSignup extends UserProfile {
   // 사용자명
   username: string;
   // 비밀번호 (해시)
-  password: string;
+  password?: string;
   // 사용자 종류
   type: 'manager' | 'user';
+  loginType: 'email' | 'kakao' | 'facebook' | 'google';
 }
 
 export default interface User extends UserSignup {

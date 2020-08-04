@@ -3,36 +3,35 @@ import { ServiceResult } from '../util/generic';
 import * as Password from '../util/password';
 import User, { UserSignup } from '../types/model/user';
 
-export async function create(profile: UserSignup):ServiceResult<'USERNAME_EXISTS' | 'EMAIL_EXISTS' | 'IMPKEY_EXISTS', User> {
-    const existingUser = await UserModel.findOne({$or: [
-        {username: profile.username},
-        {email: profile.email}
+export async function create(profile: UserSignup):ServiceResult<'USER_EXISTS', User> {
+    const existingUser = await UserModel.findOne({$and: [
+        {email: profile.email},
+        {loginType: profile.loginType},
       ]});
     console.log(existingUser);
       if (existingUser !== null) {
-        if (existingUser.username === profile.username) {
-          return {
-            success: false,
-            reason: 'USERNAME_EXISTS'
-          };
-        } else if (existingUser.email === profile.email) {
-          return {
-            success: false,
-            reason: 'EMAIL_EXISTS'
-          };
-        } else {
-          return {
-            success: false,
-            reason: 'IMPKEY_EXISTS'
-          };
-        }
+        return {
+          success: false,
+          reason: 'USER_EXISTS',
+        };
+      }
+      if (profile.password) {
+        const userObj = await UserModel.create(Object.assign(profile, {
+          name: profile.username,
+          password: await Password.hash(profile.password),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }));
+        return {
+          success: true,
+          result: userObj
+        };
       }
       const userObj = await UserModel.create(Object.assign(profile, {
-        name: profile.username,
-        password: await Password.hash(profile.password),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }));
+          name: profile.username,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }));
       console.log('userobj', userObj);
       return {
         success: true,
@@ -42,14 +41,14 @@ export async function create(profile: UserSignup):ServiceResult<'USERNAME_EXISTS
 
 export async function authenticate(email: string, password: string):
 ServiceResult<'BAD_CREDENTIALS', User> {
-  const user = await UserModel.findOne({email});
+  const user = await UserModel.findOne({email, loginType:'email'});
   if (!user) {
     return {
       success: false,
       reason: 'BAD_CREDENTIALS'
     };
   }
-  if (!(await Password.verify(user.password, password))) {
+  if (user.password && !(await Password.verify(user.password, password))) {
     return {
       success: false,
       reason: 'BAD_CREDENTIALS'
@@ -78,11 +77,20 @@ ServiceResult<'USER_NEXIST', UserDoc> {
  * @description 해당 이메일을 쓰는 사용자가 존재하는지 확인합니다
  * @param email 이메일
  */
-export async function emailView(email: string):
+export async function emailView(email: string, type: 'email' | 'kakao' | 'facebook' | 'google'):
 ServiceResult<'User_EXIST' | 'User_NEXIST', UserDoc> {
-  const user = await UserModel.findOne({email});
+  const user = await UserModel.findOne({email, loginType: type});
   if(!user) {
     return {success: false, reason: 'User_NEXIST'};
   }
-  return {success: true, reason: 'User_EXIST'};
+  return {success: true, reason: 'User_EXIST', result: user};
+}
+
+export async function idView(id: string):
+ServiceResult<'User_EXIST' | 'User_NEXIST', UserDoc> {
+  const user = await UserModel.findOne({_id: id});
+  if(!user) {
+    return {success: false, reason: 'User_NEXIST'};
+  }
+  return {success: true, reason: 'User_EXIST', result: user};
 }
