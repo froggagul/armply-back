@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
+import dotenv from 'dotenv';
 import * as AuthService from '../services/auth';
 import { UserDoc } from '../models/user';
 import PostModel from '../models/post';
 
+dotenv.config();
 
 export async function signup(req: Request, res: Response/*, next: NextFunction*/) {
   try {
@@ -25,7 +27,6 @@ export async function signup(req: Request, res: Response/*, next: NextFunction*/
 
 export async function getMyInfo(req: Request, res: Response) {
   try{
-    console.log(req.user);
     const cnt = await PostModel.find({author: (req.user as UserDoc)._id}).count();
     const {email, name, username,_id} = req.user as UserDoc;
     res.json({
@@ -67,6 +68,8 @@ export const login = [
   }
 ];
 
+const CLIENT_HOME_PAGE_URL = process.env.FRONT_URL;
+
 export const googleLogin = [
   (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
@@ -76,6 +79,8 @@ export const googleLogin = [
     }
   },
   passport.authenticate('google', {
+    successRedirect: CLIENT_HOME_PAGE_URL,
+    failureRedirect: `${CLIENT_HOME_PAGE_URL}/login`,
     scope: ['profile', 'email']
   }),
   (req: Request, res: Response) => {
@@ -98,7 +103,6 @@ export const googleLogin = [
 
 export const facebookLogin = [
   (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.isAuthenticated());
     if (req.isAuthenticated()) {
       res.status(403).json({reason: 'AUTENTICATED'});
     } else {
@@ -106,6 +110,8 @@ export const facebookLogin = [
     }
   },
   passport.authenticate('facebook', {
+    successRedirect: CLIENT_HOME_PAGE_URL,
+    failureRedirect: `${CLIENT_HOME_PAGE_URL}/login`,
     scope: ['email']
   }),
   (req: Request, res: Response) => {
