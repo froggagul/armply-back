@@ -9,3 +9,6 @@ FACEBOOK_SECRET=1234
 FRONT_URL=https://master.d36t62qh9mf3h3.amplifyapp.com
 PORT=5000
 ```
+reference
+- restAPI 구조/작동코드: https://github.com/jungnoh/rest-base
+- oAuth: https://github.com/distrue/my_pchef_back
