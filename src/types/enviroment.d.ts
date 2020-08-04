@@ -8,6 +8,7 @@ declare global {
       GOOGLE_SECRET: string;
       FACEBOOK_ID: string;
       FACEBOOK_SECRET: string;
+      FRONT_URL: string;
       PWD: string;
     }
   }

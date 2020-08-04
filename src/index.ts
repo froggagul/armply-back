@@ -30,7 +30,7 @@ const app: Application = express();
 app.use(cors({
   credentials: true, // enable set cookie
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  origin: ['http://localhost:3000', 'http://localhost']
+  origin: [process.env.FRONT_URL, 'http://localhost:3000']
 }));
 app.use(expressSession({
   cookie: {
@@ -66,4 +66,4 @@ passport.deserializeUser(PassportStrategy.deserialize);
 
 app.use(router);
 
-// app.listen(5000, () => console.log('server running'));
+app.listen(5000, () => console.log('server running'));
