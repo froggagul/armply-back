@@ -27,6 +27,7 @@ export async function signup(req: Request, res: Response/*, next: NextFunction*/
 
 export async function getMyInfo(req: Request, res: Response) {
   try{
+    console.log(req.user);
     const cnt = await PostModel.find({author: (req.user as UserDoc)._id}).count();
     const {email, name, username,_id} = req.user as UserDoc;
     res.json({
