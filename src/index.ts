@@ -65,4 +65,4 @@ passport.deserializeUser(PassportStrategy.deserialize);
 
 app.use(router);
 
-app.listen(5000, () => console.log('server running'));
+app.listen(process.env.PORT || 3000, () => console.log('server running'));
