@@ -12,3 +12,4 @@ PORT=5000
 reference
 - restAPI 구조/작동코드: https://github.com/jungnoh/rest-base
 - oAuth: https://github.com/distrue/my_pchef_back
+- deploy: https://stackoverflow.com/questions/41250087/how-to-deploy-a-react-nodejs-express-application-to-aws/41250688#41250688
