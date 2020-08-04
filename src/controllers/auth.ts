@@ -104,6 +104,7 @@ export const googleLogin = [
 
 export const facebookLogin = [
   (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.isAuthenticated());
     if (req.isAuthenticated()) {
       res.status(403).json({reason: 'AUTENTICATED'});
     } else {

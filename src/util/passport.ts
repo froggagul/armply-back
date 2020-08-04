@@ -38,6 +38,7 @@ export const googleStrategy = new GoogleStrategy({
     const email = profile._json.email;
     if (email) {
       const result = await AuthService.emailView(email, 'google');
+      console.log(result);
       if (result.success) {
         return done(undefined, result.result);
       } else {
