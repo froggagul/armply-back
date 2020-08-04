@@ -1,7 +1,7 @@
 import UserModel, { UserDoc } from '../models/user';
 import { ServiceResult } from '../util/generic';
 import * as Password from '../util/password';
-import User, { UserSignup } from '../types/model/user';
+import User, { UserSignup } from '../modelType/user';
 
 export async function create(profile: UserSignup):ServiceResult<'USER_EXISTS', User> {
     const existingUser = await UserModel.findOne({$and: [

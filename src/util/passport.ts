@@ -2,7 +2,7 @@ import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
 import {Strategy as FacebookStrategy} from 'passport-facebook';
 import * as AuthService from '../services/auth';
-import User, { UserSignup } from '../types/model/user';
+import User, { UserSignup } from '../modelType/user';
 import dotenv from 'dotenv';
 import { UserDoc } from '../models/user';
 

@@ -1,6 +1,6 @@
 import mongo from 'mongoose';
 import { ObjectId } from 'bson';
-import { Post } from '../types/model/post';
+import { Post } from '../modelType/post';
 
 const schema = new mongo.Schema<Post>({
   content: {required: true, type: String},

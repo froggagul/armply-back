@@ -1,7 +1,7 @@
 import { ObjectId } from 'bson';
 import PostModel from '../models/post';
 import { ServiceResult } from '../util/generic';
-import { Post } from '../types/model/post';
+import { Post } from '../modelType/post';
 
 export async function createPost(content: string, isPrivate: Boolean, author: ObjectId):
 ServiceResult<'USER_PERM', Post> {

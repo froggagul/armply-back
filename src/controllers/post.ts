@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from 'bson';
 import * as PostService from '../services/post';
 import { UserDoc } from '../models/user';
-import User from '../types/model/user';
+import User from '../modelType/user';
 
 export async function writePost(req: Request, res: Response, next: NextFunction) {
   try {
