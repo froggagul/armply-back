@@ -33,7 +33,7 @@ app.use(cors({
 }));
 app.use(expressSession({
   cookie: {
-    secure: false,
+    secure: true,
     httpOnly: false, // Client-side XHR will be used
     maxAge: 24 * 60 * 60 * 1000, // 1 day
     sameSite: 'none',
