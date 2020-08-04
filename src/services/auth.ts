@@ -85,12 +85,3 @@ ServiceResult<'User_EXIST' | 'User_NEXIST', UserDoc> {
   }
   return {success: true, reason: 'User_EXIST', result: user};
 }
-
-export async function idView(id: string):
-ServiceResult<'User_EXIST' | 'User_NEXIST', UserDoc> {
-  const user = await UserModel.findOne({_id: id});
-  if(!user) {
-    return {success: false, reason: 'User_NEXIST'};
-  }
-  return {success: true, reason: 'User_EXIST', result: user};
-}
