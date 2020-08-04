@@ -35,7 +35,8 @@ app.use(expressSession({
   cookie: {
     secure: false,
     httpOnly: false, // Client-side XHR will be used
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    sameSite: 'none',
   },
   resave: false,
   saveUninitialized: false,
