@@ -29,7 +29,7 @@ const app: Application = express();
 app.use(cors({
   credentials: true, // enable set cookie
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  origin: [process.env.FRONT_URL, 'http://localhost:3000']
+  origin: ['https://master.d36t62qh9mf3h3.amplifyapp.com', 'https://www.armply.com']
 }));
 app.use(expressSession({
   cookie: {
