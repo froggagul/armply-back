@@ -76,3 +76,38 @@ ServiceResult<undefined, {posts: Post[]}> {
     success: true
   };
 }
+
+export async function getLastUnsentPosts():
+ServiceResult<undefined, {posts: Post[]}> {
+  let query = PostModel.find({isSent: false});
+  query = query.sort('-createdAt').populate('author', 'username name');
+  const result = await query;
+  return {
+    result: {
+      posts: result
+    },
+    success: true
+  };
+}
+
+export async function updateUnsentPosts(ids: ObjectId[]):
+ServiceResult<'POST_NEXIST' | 'NO_IDS'> {
+  if (ids.length === 0) {
+    return {
+      reason: 'NO_IDS',
+      success: false
+    };
+  }
+  ids.forEach(async (id: ObjectId) => {
+    const post = await PostModel.findById(id);
+    if (post === null) {
+      return {reason: 'POST_NEXIST', success: false};
+    } else {
+      post.isSent = true;
+      post.save();
+    }
+  });
+  return {
+    success: true
+  };
+}

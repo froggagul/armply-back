@@ -107,3 +107,31 @@ export async function my(req: Request, res: Response, next: NextFunction) {
     next(err);
   }
 }
+
+export async function send(req: Request, res: Response, next: NextFunction) {
+  try {
+    const ret = await PostService.getLastUnsentPosts();
+    if (ret.success) {
+      return res.status(200).json(ret);
+    }
+    res.status(400).json({
+      reason: ret.reason
+    });
+  } catch(err) {
+    next(err);
+  }
+}
+
+export async function sendAndUpdatePost(req: Request, res: Response, next: NextFunction) {
+  try {
+    const ret = await PostService.updateUnsentPosts(req.body.ids);
+    if (ret.success) {
+      return res.status(200).json(ret);
+    }
+    res.status(400).json({
+      reason: ret.reason
+    });
+  } catch(err) {
+    next(err);
+  }
+}
